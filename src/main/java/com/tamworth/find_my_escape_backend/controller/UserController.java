@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -47,8 +49,11 @@ public class UserController {
     //Post
 
     @PostMapping("/new")
-    public HttpStatus createNewUser(@RequestBody String userId, String userName, String userEmailAddress) {
-        return null;
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        Set<FavouriteLocation> favouriteLocations = new HashSet<>();
+        User createdUser = new User(user.getUserId(), user.getName(), user.getEmailAddress(), user.getCurrent_Search(),favouriteLocations);
+        User user1 = userService.saveUser(createdUser);
+        return ResponseEntity.ok(user1);
     }
 
     @PostMapping("/favourite/location")

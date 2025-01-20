@@ -3,10 +3,12 @@ package com.tamworth.find_my_escape_backend.service;
 import com.tamworth.find_my_escape_backend.exception.ResourceNotFoundException;
 import com.tamworth.find_my_escape_backend.model.Activity;
 import com.tamworth.find_my_escape_backend.model.Location;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+@Service
 public class LocationServiceImpl implements LocationService {
 
     @Override
