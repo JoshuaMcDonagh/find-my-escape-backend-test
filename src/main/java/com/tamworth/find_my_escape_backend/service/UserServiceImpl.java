@@ -31,13 +31,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User updateUserEmail(String userId, String email) {
-        return null;
-    }
-
-    @Override
-    public User updateUserName(String userId, String name) {
-        return null;
+    public User updateUser(User user, String userId) {
+        Optional<User> optionaluser = userRepository.findById(userId);
+        if (optionaluser.isPresent()) {
+            user.setUserId(userId);
+            return userRepository.save(user);
+        } else {
+            throw new ResourceNotFoundException("For the following userId: " + userId + ", no user was found in the database");
+        }
     }
 
     @Override
