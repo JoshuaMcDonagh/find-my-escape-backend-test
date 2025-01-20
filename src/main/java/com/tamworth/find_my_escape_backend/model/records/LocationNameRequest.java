@@ -1,5 +1,3 @@
-package com.tamworth.find_my_escape_backend.model;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.tamworth.find_my_escape_backend.model.records;
 
 public record LocationNameRequest(String locationName) {}
