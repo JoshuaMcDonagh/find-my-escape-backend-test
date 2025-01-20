@@ -27,22 +27,27 @@ public class User {
     @Column
     private String current_Search;
 
-    @OneToMany
-    @JoinTable(
-            name= "UserFavouriteLocation",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "locationId"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "locationId"})
-    )
+
+    @OneToMany(mappedBy = "favLocationUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FavouriteLocation> favouriteLocations = new HashSet<>();
 
-    @OneToMany
-    @JoinTable(
-            name= "UserFavouriteActivity",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "activityId"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "activityId"})
-    )
-    private Set<FavouriteActivity> favouriteActivities = new HashSet<>();
+//    @OneToMany
+//    @JoinTable(
+//            name= "UserFavouriteLocation",
+//            joinColumns = @JoinColumn(name = "userId"),
+//            inverseJoinColumns = @JoinColumn(name = "locationId"),
+//            uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "locationId"})
+//    )
+//    private Set<FavouriteLocation> favouriteLocations = new HashSet<>();
+//
+//    @OneToMany
+//    @JoinTable(
+//            name= "UserFavouriteActivity",
+//            joinColumns = @JoinColumn(name = "userId"),
+//            inverseJoinColumns = @JoinColumn(name = "activityId"),
+//            uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "activityId"})
+//    )
+
+
 
 }
