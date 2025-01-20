@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/v1/location")
-public class LocationController {
+public class LocationInformationController {
 
     @Autowired
     LocationService locationService;
