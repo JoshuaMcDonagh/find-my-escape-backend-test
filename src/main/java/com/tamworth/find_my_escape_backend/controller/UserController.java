@@ -24,9 +24,10 @@ public class UserController {
 
     //Get
 
-    @GetMapping
-    public ResponseEntity<User> getUserById(@RequestBody String userId) {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable(name = "id") String userId) {
+        User user = userService.findUserById(userId);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/favourites")
