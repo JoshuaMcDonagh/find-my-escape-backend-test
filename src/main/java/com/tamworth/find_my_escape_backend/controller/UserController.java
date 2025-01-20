@@ -36,15 +36,10 @@ public class UserController {
     }
 
     //Put
-
-    @PutMapping("/change/email")
-    public HttpStatus changeUserEmail(@RequestBody String userId, String emailAddress) {
-        return null;
-    }
-
-    @PutMapping("/change/name")
-    public HttpStatus changeUserName(@RequestBody String userId, String emailAddress) {
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<User> changeUserEmail(@RequestBody User user, @PathVariable(name = "id") String userId) {
+        User user1 = userService.updateUser(user, userId);
+        return ResponseEntity.ok(user1);
     }
 
     //Post
