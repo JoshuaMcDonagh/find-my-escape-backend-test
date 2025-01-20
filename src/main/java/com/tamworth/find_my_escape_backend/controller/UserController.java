@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -22,9 +24,10 @@ public class UserController {
 
     //Get
 
-    @GetMapping
-    public ResponseEntity<User> getUserById(@RequestBody String userId) {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable(name = "id") String userId) {
+        User user = userService.findUserById(userId);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/favourites")
@@ -33,22 +36,20 @@ public class UserController {
     }
 
     //Put
-
-    @PutMapping("/change/email")
-    public HttpStatus changeUserEmail(@RequestBody String userId, String emailAddress) {
-        return null;
-    }
-
-    @PutMapping("/change/name")
-    public HttpStatus changeUserName(@RequestBody String userId, String emailAddress) {
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable(name = "id") String userId) {
+        User user1 = userService.updateUser(user, userId);
+        return ResponseEntity.ok(user1);
     }
 
     //Post
 
     @PostMapping("/new")
-    public HttpStatus createNewUser(@RequestBody String userId, String userName, String userEmailAddress) {
-        return null;
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        Set<FavouriteLocation> favouriteLocations = new HashSet<>();
+        User createdUser = new User(user.getUserId(), user.getName(), user.getEmailAddress(), user.getCurrent_Search(),favouriteLocations);
+        User user1 = userService.saveUser(createdUser);
+        return ResponseEntity.ok(user1);
     }
 
     @PostMapping("/favourite/location")
@@ -63,9 +64,10 @@ public class UserController {
 
     //Delete
 
-    @DeleteMapping("/user/delete")
-    public HttpStatus deleteUser(@RequestBody String userId) {
-        return null;
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable(name = "id") String userId) {
+        User user = userService.deleteUserById(userId);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/user/favourite/location/remove")

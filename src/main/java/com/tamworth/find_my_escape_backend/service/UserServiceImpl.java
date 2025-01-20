@@ -1,9 +1,12 @@
 package com.tamworth.find_my_escape_backend.service;
 
+import com.tamworth.find_my_escape_backend.exception.ResourceNotFoundException;
 import com.tamworth.find_my_escape_backend.model.User;
 import com.tamworth.find_my_escape_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -13,27 +16,42 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findUserById(String userId) {
-        return null;
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException("For the specified user id: " + userId + ", there is no user information that is found within the database!");
+        } else {
+            return user.get();
+        }
     }
 
     @Override
     public User saveUser(User user) {
-        return null;
+        User user1 = userRepository.save(user);
+        return user1;
     }
 
     @Override
-    public User updateUserEmail(String userId, String email) {
-        return null;
-    }
-
-    @Override
-    public User updateUserName(String userId, String name) {
-        return null;
+    public User updateUser(User user, String userId) {
+        Optional<User> optionaluser = userRepository.findById(userId);
+        if (optionaluser.isPresent()) {
+            user.setUserId(userId);
+            return userRepository.save(user);
+        } else {
+            throw new ResourceNotFoundException("For the following userId: " + userId + ", no user was found in the database");
+        }
     }
 
     @Override
     public User deleteUserById(String userId) {
-        return null;
+        Optional<User> user = userRepository.findById(userId);
+        User deletedUser;
+        if (user.isPresent()) {
+            deletedUser = user.get();
+            userRepository.deleteById(userId);
+            return deletedUser;
+        } else {
+            throw new ResourceNotFoundException(String.format("For the following userId: " + userId + ", no user was found in the database"));
+        }
     }
 
     @Override

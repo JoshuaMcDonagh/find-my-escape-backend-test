@@ -7,9 +7,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    User updateUserEmail(String userId, String email);
-
-    User updateUserName(String userId, String name);
+    User updateUser(User user, String userId);
 
     User deleteUserById(String userId);
 
