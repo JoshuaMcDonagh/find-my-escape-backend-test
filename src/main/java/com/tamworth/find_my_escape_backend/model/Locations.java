@@ -1,27 +1,38 @@
 package com.tamworth.find_my_escape_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Table
 public class Locations {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, unique = true)
     private Long locationId;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String locationName;
 
     @Column
     private String description;
+
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("location-activities")
+    private Set<FavouriteActivity> favouriteActivities = new HashSet<>();
+
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("location-favourites")
+    private Set<FavouriteLocation> favouriteLocations = new HashSet<>();
+
 
     public Long getLocationId() {
         return locationId;
