@@ -5,27 +5,30 @@ import com.tamworth.find_my_escape_backend.service.FavouriteActivityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/favourite-activities")
 public class FavouriteActivityController {
-
     private final FavouriteActivityService favouriteActivityService;
 
     public FavouriteActivityController(FavouriteActivityService favouriteActivityService) {
         this.favouriteActivityService = favouriteActivityService;
     }
 
-    @PostMapping("/{locationId}")
-    public ResponseEntity<FavouriteActivity> addActivityToLocation(
-            @PathVariable Long locationId,
-            @RequestBody FavouriteActivity activity) {
-        FavouriteActivity createdActivity = favouriteActivityService.addActivityToLocation(activity, locationId);
-        return ResponseEntity.ok(createdActivity);
+    @GetMapping("/{userId}/{locationId}")
+    public ResponseEntity<List<FavouriteActivity>> getFavouriteActivities(@PathVariable String userId, @PathVariable Long locationId) {
+        return ResponseEntity.ok(favouriteActivityService.getFavouriteActivities(userId, locationId));
     }
 
-    @DeleteMapping("/{activityId}")
-    public ResponseEntity<Void> removeActivityFromLocation(@PathVariable Long activityId) {
-        favouriteActivityService.removeActivityFromLocation(activityId);
+    @PostMapping("/{userId}/{locationId}")
+    public ResponseEntity<FavouriteActivity> addFavouriteActivity(@PathVariable String userId, @PathVariable Long locationId, @RequestBody FavouriteActivity activity) {
+        return ResponseEntity.ok(favouriteActivityService.addFavouriteActivity(userId, locationId, activity));
+    }
+
+    @DeleteMapping("/{userId}/{locationId}/{activityId}")
+    public ResponseEntity<Void> removeFavouriteActivity(@PathVariable String userId, @PathVariable Long locationId, @PathVariable Long activityId) {
+        favouriteActivityService.removeFavouriteActivity(userId, locationId, activityId);
         return ResponseEntity.noContent().build();
     }
 }
