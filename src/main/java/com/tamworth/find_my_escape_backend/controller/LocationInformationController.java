@@ -18,9 +18,9 @@ public class LocationInformationController {
     @Autowired
     LocationInformationService locationInformationService;
 
-    @GetMapping("/information")
-    public ResponseEntity<Location> getLocationInformation(@RequestBody LocationNameRequest locationNameRequest) {
-        Location requestedLocation = locationInformationService.findLocationInformation(locationNameRequest.locationName());
+    @GetMapping("/information/{locationName}")
+    public ResponseEntity<Location> getLocationInformation(@PathVariable String locationName) {
+        Location requestedLocation = locationInformationService.findLocationInformation(locationName);
         HttpStatus resultingStatus = requestedLocation.name() == null || requestedLocation.description() == null ? NOT_FOUND : OK;
 
         return new ResponseEntity<>(requestedLocation, resultingStatus);
