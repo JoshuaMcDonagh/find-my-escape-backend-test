@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -24,15 +27,38 @@ public class FavouriteLocation {
     @JoinColumn(name = "userId", nullable = false)
     private User favLocationUser;
 
+    @OneToMany(mappedBy = "favouriteLocation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FavouriteActivity> favouriteActivities = new HashSet<>();
 
-//    @ManyToOne(fetch=FetchType.LAZY)
-//    @JoinTable(
-//            name= "UserFavouriteLocation",
-//            joinColumns = @JoinColumn(name = "locationId"),
-//            inverseJoinColumns = @JoinColumn(name = "userId"),
-//            uniqueConstraints = @UniqueConstraint(columnNames = {"locationId", "userId"})
-//    )
+    public Long getLocationId() {
+        return locationId;
+    }
 
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
+    }
 
+    public String getLocationName() {
+        return locationName;
+    }
 
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public User getFavLocationUser() {
+        return favLocationUser;
+    }
+
+    public void setFavLocationUser(User favLocationUser) {
+        this.favLocationUser = favLocationUser;
+    }
+
+    public Set<FavouriteActivity> getFavouriteActivities() {
+        return favouriteActivities;
+    }
+
+    public void setFavouriteActivities(Set<FavouriteActivity> favouriteActivities) {
+        this.favouriteActivities = favouriteActivities;
+    }
 }
