@@ -1,5 +1,6 @@
 package com.tamworth.find_my_escape_backend.service;
 
+import com.tamworth.find_my_escape_backend.dto.FavouriteLocationRequest;
 import com.tamworth.find_my_escape_backend.model.FavouriteLocation;
 import com.tamworth.find_my_escape_backend.model.Locations;
 import com.tamworth.find_my_escape_backend.model.User;
@@ -23,15 +24,39 @@ public class FavouriteLocationServiceImpl implements FavouriteLocationService {
         this.userRepository = userRepository;
     }
 
-    @Override
+
     public List<FavouriteLocation> getUserFavouriteLocations(String userId) {
         return favouriteLocationRepository.findAllByUser_UserId(userId);
     }
 
+    @Transactional
     @Override
-    public FavouriteLocation addFavouriteLocation(String userId, Long locationId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found."));
-        Locations location = locationRepository.findById(locationId).orElseThrow(() -> new IllegalArgumentException("Location not found."));
+    public FavouriteLocation addFavouriteLocation(String userId, FavouriteLocationRequest request) {
+        // Validate user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        // Check if the location already exists by ID
+        Locations location = locationRepository.findById(request.getLocationId())
+                .orElseGet(() -> {
+                    // Create a new location if it doesn't exist
+                    Locations newLocation = new Locations();
+                    newLocation.setLocationId(request.getLocationId());
+                    newLocation.setLocationName(request.getLocationName());
+                    newLocation.setDescription(request.getLocationDescription());
+                    return locationRepository.save(newLocation);
+                });
+
+        // Check if the user has already favorited this location
+        boolean alreadyFavorited = favouriteLocationRepository
+                .findAllByUser_UserId(userId)
+                .stream()
+                .anyMatch(fav -> fav.getLocation().getLocationId().equals(location.getLocationId()));
+        if (alreadyFavorited) {
+            throw new IllegalArgumentException("User has already favorited this location.");
+        }
+
+        // Create the favourite location entry
         FavouriteLocation favouriteLocation = new FavouriteLocation(user, location);
         return favouriteLocationRepository.save(favouriteLocation);
     }
