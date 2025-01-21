@@ -1,5 +1,6 @@
 package com.tamworth.find_my_escape_backend.controller;
 
+import com.tamworth.find_my_escape_backend.dto.FavouriteLocationRequest;
 import com.tamworth.find_my_escape_backend.model.FavouriteLocation;
 import com.tamworth.find_my_escape_backend.service.FavouriteLocationService;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,13 @@ public class FavouriteLocationController {
         return ResponseEntity.ok(favouriteLocationService.getUserFavouriteLocations(userId));
     }
 
-    @PostMapping("/{userId}/{locationId}")
-    public ResponseEntity<FavouriteLocation> addFavouriteLocation(@PathVariable String userId, @PathVariable Long locationId) {
-        return ResponseEntity.ok(favouriteLocationService.addFavouriteLocation(userId, locationId));
+
+    @PostMapping("/{userId}")
+    public ResponseEntity<FavouriteLocation> addFavouriteLocation(
+            @PathVariable String userId,
+            @RequestBody FavouriteLocationRequest request) {
+        FavouriteLocation createdFavouriteLocation = favouriteLocationService.addFavouriteLocation(userId, request);
+        return ResponseEntity.ok(createdFavouriteLocation);
     }
 
     @DeleteMapping("/{userId}/{locationId}")
