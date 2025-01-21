@@ -1,9 +1,9 @@
 package com.tamworth.find_my_escape_backend.service;
 
-import com.tamworth.find_my_escape_backend.model.records.Location;
+
+import com.tamworth.find_my_escape_backend.model.Location;
 import com.tamworth.find_my_escape_backend.model.records.Page;
 import com.tamworth.find_my_escape_backend.model.records.WikiApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

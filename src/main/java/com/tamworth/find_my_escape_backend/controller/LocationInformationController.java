@@ -1,6 +1,6 @@
 package com.tamworth.find_my_escape_backend.controller;
 
-import com.tamworth.find_my_escape_backend.model.records.Location;
+import com.tamworth.find_my_escape_backend.model.Location;
 import com.tamworth.find_my_escape_backend.model.records.LocationNameRequest;
 import com.tamworth.find_my_escape_backend.service.LocationInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
