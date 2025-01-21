@@ -1,81 +1,51 @@
 package com.tamworth.find_my_escape_backend.service;
 
-import com.tamworth.find_my_escape_backend.exception.ResourceNotFoundException;
 import com.tamworth.find_my_escape_backend.model.User;
 import com.tamworth.find_my_escape_backend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public User findUserById(String userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new ResourceNotFoundException("For the specified user id: " + userId + ", there is no user information that is found within the database!");
-        } else {
-            return user.get();
+    public User createUser(User user) {
+        if (userRepository.existsById(user.getUserId())) {
+            throw new IllegalArgumentException("User with ID " + user.getUserId() + " already exists.");
         }
+        return userRepository.save(user);
     }
 
     @Override
-    public User saveUser(User user) {
-        User user1 = userRepository.save(user);
-        return user1;
-    }
-
-    @Override
-    public User updateUser(User user, String userId) {
-        Optional<User> optionaluser = userRepository.findById(userId);
-        if (optionaluser.isPresent()) {
-            user.setUserId(userId);
-            return userRepository.save(user);
-        } else {
-            throw new ResourceNotFoundException("For the following userId: " + userId + ", no user was found in the database");
+    public void deleteUser(String userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
         }
+        userRepository.deleteById(userId);
     }
 
     @Override
-    public User deleteUserById(String userId) {
-        Optional<User> user = userRepository.findById(userId);
-        User deletedUser;
-        if (user.isPresent()) {
-            deletedUser = user.get();
-            userRepository.deleteById(userId);
-            return deletedUser;
-        } else {
-            throw new ResourceNotFoundException(String.format("For the following userId: " + userId + ", no user was found in the database"));
+    public User updateUser(String userId, String name, String emailAddress) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " not found."));
+
+        if (name != null && !name.isBlank()) {
+            user.setName(name);
         }
+        if (emailAddress != null && !emailAddress.isBlank()) {
+            user.setEmailAddress(emailAddress);
+        }
+        return userRepository.save(user);
     }
 
     @Override
-    public User saveFavouriteLocation(String userId, String locationId, String locationName) {
-        return null;
-    }
-
-    @Override
-    public User saveFavouriteActivity(String userId, String activity, String activityName, String activityType) {
-        return null;
-    }
-
-    @Override
-    public User deleteFavouriteLocationByUserId(String UserId, String locationId) {
-        return null;
-    }
-
-    @Override
-    public User deleteFavouriteActivityByUserId(String UserId, String activity) {
-        return null;
-    }
-
-    @Override
-    public User getAllFavourites(String UserId) {
-        return null;
+    public User getUserById(String userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " not found."));
     }
 }
