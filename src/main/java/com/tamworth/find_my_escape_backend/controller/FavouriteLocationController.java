@@ -5,30 +5,30 @@ import com.tamworth.find_my_escape_backend.service.FavouriteLocationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/favourite-locations")
 public class FavouriteLocationController {
-
     private final FavouriteLocationService favouriteLocationService;
 
     public FavouriteLocationController(FavouriteLocationService favouriteLocationService) {
         this.favouriteLocationService = favouriteLocationService;
     }
 
-    @PostMapping
-    public ResponseEntity<FavouriteLocation> createFavouriteLocation(@RequestBody FavouriteLocation location) {
-        FavouriteLocation createdLocation = favouriteLocationService.createFavouriteLocation(location);
-        return ResponseEntity.ok(createdLocation);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<FavouriteLocation>> getUserFavouriteLocations(@PathVariable String userId) {
+        return ResponseEntity.ok(favouriteLocationService.getUserFavouriteLocations(userId));
     }
 
-    @GetMapping("/{locationId}")
-    public ResponseEntity<FavouriteLocation> getLocationWithActivities(@PathVariable Long locationId) {
-        return ResponseEntity.ok(favouriteLocationService.getLocationWithActivities(locationId));
+    @PostMapping("/{userId}/{locationId}")
+    public ResponseEntity<FavouriteLocation> addFavouriteLocation(@PathVariable String userId, @PathVariable Long locationId) {
+        return ResponseEntity.ok(favouriteLocationService.addFavouriteLocation(userId, locationId));
     }
 
-    @DeleteMapping("/{locationId}/user/{userId}")
-    public ResponseEntity<Void> deleteFavouriteLocation(@PathVariable Long locationId, @PathVariable String userId) {
-        favouriteLocationService.deleteFavouriteLocation(locationId, userId);
+    @DeleteMapping("/{userId}/{locationId}")
+    public ResponseEntity<Void> removeFavouriteLocation(@PathVariable String userId, @PathVariable Long locationId) {
+        favouriteLocationService.removeFavouriteLocation(userId, locationId);
         return ResponseEntity.noContent().build();
     }
 }
