@@ -34,3 +34,7 @@ build/
 
 ### Properties ###
 src/main/resources/application.properties
+
+
+application-psql.properties
+application-h2.properties
