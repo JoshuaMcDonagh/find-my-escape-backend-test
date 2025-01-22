@@ -1,9 +1,12 @@
 package com.tamworth.find_my_escape_backend.service;
 
+import com.tamworth.find_my_escape_backend.dto.FavouriteLocationRequest;
 import com.tamworth.find_my_escape_backend.model.FavouriteLocation;
 
+import java.util.List;
+
 public interface FavouriteLocationService {
-    void deleteFavouriteLocation(Long locationId, String userId);
-    FavouriteLocation getLocationWithActivities(Long locationId);
-    FavouriteLocation createFavouriteLocation(FavouriteLocation location);
+    List<FavouriteLocation> getUserFavouriteLocations(String userId);
+    FavouriteLocation addFavouriteLocation(String userId, FavouriteLocationRequest request);
+    void removeFavouriteLocation(String userId, Long locationId);
 }

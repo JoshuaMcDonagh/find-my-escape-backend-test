@@ -1,5 +1,6 @@
 package com.tamworth.find_my_escape_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,59 +10,31 @@ import java.util.Set;
 @Entity
 @Data
 @Builder
-@Table(name = "USER")
+@Table(name = "users")
 public class User {
     @Id
-    @NonNull
-    @Column
+    @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String emailAddress;
 
-    @Column
-    private String current_Search;
-
-
-    @OneToMany(mappedBy = "favLocationUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<FavouriteLocation> favouriteLocations = new HashSet<>();
 
-//    @OneToMany
-//    @JoinTable(
-//            name= "UserFavouriteLocation",
-//            joinColumns = @JoinColumn(name = "userId"),
-//            inverseJoinColumns = @JoinColumn(name = "locationId"),
-//            uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "locationId"})
-//    )
-//    private Set<FavouriteLocation> favouriteLocations = new HashSet<>();
-//
-//    @OneToMany
-//    @JoinTable(
-//            name= "UserFavouriteActivity",
-//            joinColumns = @JoinColumn(name = "userId"),
-//            inverseJoinColumns = @JoinColumn(name = "activityId"),
-//            uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "activityId"})
-//    )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<FavouriteActivity> favouriteActivities = new HashSet<>();
 
-    public User() {
-    }
-
-    public User(@NonNull String userId, String name, String emailAddress, String current_Search, Set<FavouriteLocation> favouriteLocations) {
-        this.userId = userId;
-        this.name = name;
-        this.emailAddress = emailAddress;
-        this.current_Search = current_Search;
-        this.favouriteLocations = favouriteLocations;
-    }
-
-    public @NonNull String getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(@NonNull String userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -81,19 +54,30 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public String getCurrent_Search() {
-        return current_Search;
-    }
-
-    public void setCurrent_Search(String current_Search) {
-        this.current_Search = current_Search;
-    }
-
     public Set<FavouriteLocation> getFavouriteLocations() {
         return favouriteLocations;
     }
 
     public void setFavouriteLocations(Set<FavouriteLocation> favouriteLocations) {
         this.favouriteLocations = favouriteLocations;
+    }
+
+    public Set<FavouriteActivity> getFavouriteActivities() {
+        return favouriteActivities;
+    }
+
+    public void setFavouriteActivities(Set<FavouriteActivity> favouriteActivities) {
+        this.favouriteActivities = favouriteActivities;
+    }
+
+    public User() {
+    }
+
+    public User(String userId, String name, String emailAddress, Set<FavouriteLocation> favouriteLocations, Set<FavouriteActivity> favouriteActivities) {
+        this.userId = userId;
+        this.name = name;
+        this.emailAddress = emailAddress;
+        this.favouriteLocations = favouriteLocations;
+        this.favouriteActivities = favouriteActivities;
     }
 }

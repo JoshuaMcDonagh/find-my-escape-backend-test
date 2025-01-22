@@ -3,22 +3,8 @@ package com.tamworth.find_my_escape_backend.service;
 import com.tamworth.find_my_escape_backend.model.User;
 
 public interface UserService {
-    User findUserById(String userId);
-
-    User saveUser(User user);
-
-    User updateUser(User user, String userId);
-
-    User deleteUserById(String userId);
-
-    User saveFavouriteLocation(String userId, String locationId, String locationName);
-
-    User saveFavouriteActivity(String userId, String activity, String activityName, String activityType);
-
-    User deleteFavouriteLocationByUserId(String UserId, String locationId);
-
-    User deleteFavouriteActivityByUserId(String UserId, String activity);
-
-    User getAllFavourites(String UserId);
-
+    User createUser(User user); // Create a new user
+    void deleteUser(String userId); // Delete a user by ID
+    User updateUser(String userId, String name, String emailAddress); // Update user details
+    User getUserById(String userId); // Retrieve user details by ID
 }
