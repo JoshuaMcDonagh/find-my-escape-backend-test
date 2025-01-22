@@ -14,7 +14,7 @@ public class EmailContent {
             "Escape\nhelp@find-my-escape\n";
 
     private String deletionSubject = "Account Deleted";
-    private String deletionBody = "Dear " + userName + ",\n\nWe are sorry to see you go!" +
+    private String deletionBody = "Dear " + userName + ",\n\nWe are sorry to see you go!\n" +
             "\nYour account has been deleted and you will no longer be able to access your favourites or details.\n" +
             "\nYou can still access the search as a guest but will have to re-register to save any favourites.\n\nIf you have any questions " +
             "or need further assistance, feel free to reach out to us.\n\nBest regards,\n\nThe Support Team\n\nFind my " +
