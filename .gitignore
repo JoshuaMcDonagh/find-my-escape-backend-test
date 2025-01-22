@@ -33,8 +33,4 @@ build/
 .vscode/
 
 ### Properties ###
-src/main/resources/application.properties
-
-
-application-psql.properties
-application-h2.properties
+src/main/resources/application-prod.properties
