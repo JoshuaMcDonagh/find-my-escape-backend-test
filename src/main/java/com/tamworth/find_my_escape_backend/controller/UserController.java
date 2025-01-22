@@ -1,83 +1,51 @@
 package com.tamworth.find_my_escape_backend.controller;
 
-import com.tamworth.find_my_escape_backend.model.FavouriteActivity;
-import com.tamworth.find_my_escape_backend.model.FavouriteLocation;
 import com.tamworth.find_my_escape_backend.model.User;
 import com.tamworth.find_my_escape_backend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
-    //Get
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable(name = "id") String userId) {
-        User user = userService.findUserById(userId);
+    // Create a new user
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.createUser(user);
+        return ResponseEntity.ok(createdUser);
+    }
+
+    // Delete a user by ID
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Update user details
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUser(
+            @PathVariable String userId,
+            @RequestBody User updateUserRequest) {
+        User updatedUser = userService.updateUser(
+                userId,
+                updateUserRequest.getName(),
+                updateUserRequest.getEmailAddress()
+        );
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    // Retrieve user details by ID
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable String userId) {
+        User user = userService.getUserById(userId);
         return ResponseEntity.ok(user);
     }
-
-    @GetMapping("/favourites")
-    public ResponseEntity<Map<FavouriteLocation, FavouriteActivity>> getFavouritesByUserId(@RequestBody String userId) {
-        return null;
-    }
-
-    //Put
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable(name = "id") String userId) {
-        User user1 = userService.updateUser(user, userId);
-        return ResponseEntity.ok(user1);
-    }
-
-    //Post
-
-    @PostMapping("/new")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        Set<FavouriteLocation> favouriteLocations = new HashSet<>();
-        User createdUser = new User(user.getUserId(), user.getName(), user.getEmailAddress(), user.getCurrent_Search(),favouriteLocations);
-        User user1 = userService.saveUser(createdUser);
-        return ResponseEntity.ok(user1);
-    }
-
-    @PostMapping("/favourite/location")
-    public HttpStatus addFavouriteLocation(@RequestBody String userId, String locationId, String locationName) {
-        return null;
-    }
-
-    @PutMapping("/favourite/activity")
-    public HttpStatus addFavouriteActivity(@RequestBody String userId, String locationId, String activityId, String activityName) {
-        return null;
-    }
-
-    //Delete
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable(name = "id") String userId) {
-        User user = userService.deleteUserById(userId);
-        return ResponseEntity.ok(user);
-    }
-
-    @DeleteMapping("/user/favourite/location/remove")
-    public HttpStatus removeFavouriteLocation(@RequestBody String userId, String locationId) {
-        return null;
-    }
-
-    @DeleteMapping("/user/favourite/activity/remove")
-    public HttpStatus removeFavouriteActivity(@RequestBody String userId, String activityId) {
-        return null;
-    }
-
 }

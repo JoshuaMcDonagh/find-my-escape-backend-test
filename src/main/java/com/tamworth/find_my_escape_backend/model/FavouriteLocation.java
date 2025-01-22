@@ -1,5 +1,7 @@
 package com.tamworth.find_my_escape_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,54 +13,58 @@ import java.util.Set;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Table(name = "favourite_location")
+@Table(name = "favourite_locations")
 public class FavouriteLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long locationId;
+    private Long id;
 
-    @Column
-    private String locationName;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
-    private User favLocationUser;
+    @JoinColumn(name = "location_id", nullable = false)
+    @JsonBackReference("location-favourites")
+    private Locations location;
 
-    @OneToMany(mappedBy = "favouriteLocation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<FavouriteActivity> favouriteActivities = new HashSet<>();
-
-    public Long getLocationId() {
-        return locationId;
+    public FavouriteLocation(User user, Locations location) {
+        this.user = user;
+        this.location = location;
     }
 
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
+    public Long getId() {
+        return id;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public User getUser() {
+        return user;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public Locations getLocation() {
+        return location;
     }
 
-    public User getFavLocationUser() {
-        return favLocationUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setFavLocationUser(User favLocationUser) {
-        this.favLocationUser = favLocationUser;
+    public void setLocation(Locations location) {
+        this.location = location;
     }
 
-    public Set<FavouriteActivity> getFavouriteActivities() {
-        return favouriteActivities;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setFavouriteActivities(Set<FavouriteActivity> favouriteActivities) {
-        this.favouriteActivities = favouriteActivities;
+    public FavouriteLocation() {
+    }
+
+    public FavouriteLocation(Long id, User user, Locations location) {
+        this.id = id;
+        this.user = user;
+        this.location = location;
     }
 }

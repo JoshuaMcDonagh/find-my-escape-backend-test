@@ -1,14 +1,14 @@
 package com.tamworth.find_my_escape_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Table(name = "favourite_activity")
+@Table(name = "favourite_activities")
 public class FavouriteActivity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,8 +21,14 @@ public class FavouriteActivity {
     private String activityType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "locationId", nullable = false)
-    private FavouriteLocation favouriteLocation;
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
+    @JsonBackReference("location-activities")
+    private Locations location;
 
     public Long getActivityId() {
         return activityId;
@@ -48,11 +54,30 @@ public class FavouriteActivity {
         this.activityType = activityType;
     }
 
-    public FavouriteLocation getFavouriteLocation() {
-        return favouriteLocation;
+    public User getUser() {
+        return user;
     }
 
-    public void setFavouriteLocation(FavouriteLocation favouriteLocation) {
-        this.favouriteLocation = favouriteLocation;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Locations getLocation() {
+        return location;
+    }
+
+    public void setLocation(Locations location) {
+        this.location = location;
+    }
+
+    public FavouriteActivity() {
+    }
+
+    public FavouriteActivity(Long activityId, String activityName, String activityType, User user, Locations location) {
+        this.activityId = activityId;
+        this.activityName = activityName;
+        this.activityType = activityType;
+        this.user = user;
+        this.location = location;
     }
 }

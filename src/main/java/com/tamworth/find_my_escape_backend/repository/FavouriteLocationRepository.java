@@ -7,11 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface FavouriteLocationRepository extends JpaRepository<FavouriteLocation, Long> {
-
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM FavouriteLocation fl WHERE fl.locationId = :locationId AND fl.favLocationUser.userId = :userId")
-    void deleteByLocationIdAndUserId(Long locationId, String userId);
+    List<FavouriteLocation> findAllByUser_UserId(String userId);
 }
