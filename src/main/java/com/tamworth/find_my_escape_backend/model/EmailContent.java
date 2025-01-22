@@ -4,10 +4,10 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class EmailContent {
-    private String userName;
+    private String userName = "user";
 
     private String welcomeSubject = "Welcome to Find My Escape";
-    private String welcomeBody = "Dear " + userName + ",\n\nWelcome to Find Your Escape!" +
+    private String welcomeBody = "Dear " + userName + ",\n\nWelcome to Find My Escape!" +
             " We are excited to have you along with us!\n" +
             "\nYou can change any details or look through your favourites in the app.\n\nIf you have any questions " +
             "or need further assistance, feel free to reach out to us.\n\nBest regards,\n\nThe Support Team\n\nFind my " +
